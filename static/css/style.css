@@ -1,0 +1,32 @@
+.camera-container {
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: var(--bs-dark);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+#canvas {
+    pointer-events: none;
+}
+
+.controls {
+    margin-top: 1rem;
+}
+
+#loading {
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.alert {
+    margin-top: 1rem;
+}
