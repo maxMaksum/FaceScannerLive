@@ -27,15 +27,15 @@ def detect_faces():
         # Get image data from request
         from flask import request
         image_data = request.json['image']
-        
+
         # Convert base64 image to numpy array
         encoded_data = image_data.split(',')[1]
         nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
+
         # Convert to grayscale for face detection
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        
+
         # Detect faces
         faces = face_cascade.detectMultiScale(
             gray,
@@ -43,13 +43,16 @@ def detect_faces():
             minNeighbors=5,
             minSize=(30, 30)
         )
-        
+
+        # Convert faces to list format
+        faces_list = faces.tolist() if len(faces) else []
+
         # Return face coordinates
         return jsonify({
             'success': True,
-            'faces': faces.tolist()
+            'faces': faces_list
         })
-        
+
     except Exception as e:
         logger.error(f"Error during face detection: {str(e)}")
         return jsonify({
