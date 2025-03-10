@@ -53,7 +53,10 @@ def detect_faces():
         )
 
         # Convert faces to list format
-        faces_list = faces.tolist() if len(faces) else []
+        faces_list = []
+        for face in faces:
+            # Convert numpy int32 values to native Python integers
+            faces_list.append([int(x) for x in face])
 
         # Return face coordinates
         return jsonify({
@@ -157,7 +160,14 @@ def recognize_face():
         # Get all known faces
         known_faces = FaceEncoding.query.all()
         if not known_faces:
-            return jsonify({'success': True, 'faces': [{'location': face.tolist(), 'name': 'Unknown'} for face in faces]})
+            # Convert numpy int32 values to native Python integers
+            return jsonify({
+                'success': True,
+                'faces': [{
+                    'location': [int(y), int(x + w), int(y + h), int(x)],
+                    'name': 'Unknown'
+                } for (x, y, w, h) in faces]
+            })
 
         recognized_faces = []
         for (x, y, w, h) in faces:
@@ -166,16 +176,19 @@ def recognize_face():
 
             try:
                 label, confidence = recognizer.predict(face_roi)
+                # Convert numpy int32/float32 values to native Python types
+                label = int(label)
+                confidence = float(confidence)
                 name = known_faces[label].name if confidence < 100 else "Unknown"
 
                 recognized_faces.append({
-                    'location': [y, x + w, y + h, x],  # Format: [top, right, bottom, left]
+                    'location': [int(y), int(x + w), int(y + h), int(x)],  # Convert to native Python integers
                     'name': name
                 })
             except Exception as e:
                 logger.error(f"Error during recognition of individual face: {str(e)}")
                 recognized_faces.append({
-                    'location': [y, x + w, y + h, x],
+                    'location': [int(y), int(x + w), int(y + h), int(x)],
                     'name': "Unknown"
                 })
 
