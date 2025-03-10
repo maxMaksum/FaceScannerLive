@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Detection App</title>
+    <title>Real-time Face Recognition</title>
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
     <div class="container py-4">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center mb-4">Real-time Face Detection</h1>
+                <h1 class="text-center mb-4">Real-time Face Recognition</h1>
             </div>
         </div>
 
@@ -28,11 +28,38 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="controls mt-3 text-center">
                             <button id="startButton" class="btn btn-primary me-2">Start Camera</button>
                             <button id="stopButton" class="btn btn-secondary me-2" disabled>Stop Camera</button>
-                            <button id="screenshotButton" class="btn btn-info" disabled>Log Face Screenshot</button>
+                            <button id="screenshotButton" class="btn btn-info me-2" disabled>Log Face Screenshot</button>
+                            <button id="enrollButton" class="btn btn-success me-2" disabled>Enroll Face</button>
+                            <button id="recognizeButton" class="btn btn-warning" disabled>Toggle Recognition</button>
+                        </div>
+
+                        <!-- Enrollment Modal -->
+                        <div class="modal fade" id="enrollModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Enroll New Face</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="enrollName" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="enrollName" required>
+                                        </div>
+                                        <div id="enrollPreview" class="text-center">
+                                            <img id="enrollImage" class="img-fluid d-none" alt="Face preview">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="saveEnrollButton">Save</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="alert alert-danger mt-3 d-none" id="errorAlert" role="alert">
