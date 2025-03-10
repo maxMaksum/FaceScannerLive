@@ -85,6 +85,14 @@ class FaceDetector {
         console.log(imageData);
     }
 
+    startDetection() {
+        this.detectionInterval = setInterval(() => {
+            if (this.isRunning) {
+                this.detectFaces();
+            }
+        }, 100);
+    }
+
     async detectFaces() {
         if (!this.isRunning) return;
 
